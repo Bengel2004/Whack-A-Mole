@@ -6,10 +6,26 @@ namespace WhackAMole.Managers
 {
     public class HoleGenerator : MonoBehaviour
     {
+        #region Public Fields
+
         public List<Vector3> _holePositions = new();
+
+        #endregion
+
+        #region Serialized Fields
+
         [SerializeField] private float _holeAmount = 5f;
         [SerializeField] private float _gridHeight = 3f;
+
+        #endregion
+
+        #region Private Fields
+
         private Vector2 _offset = new Vector2(2.5f, -2.5f);
+
+        #endregion
+
+        #region Private
 
         /// <summary>
         /// Generates the grid for the mole to move into.
@@ -41,6 +57,8 @@ namespace WhackAMole.Managers
             }
 
         }
+
+        #endregion
 
         // Start is called before the first frame update
         void Start()

@@ -7,14 +7,23 @@ namespace WhackAMole.PlayerInput
 {
     public class PlayerInput : MonoBehaviour
     {
+        #region Private Fields
+
         private RaycastHit2D hit = default;
+
+        #endregion
+
+        #region Setup
         // Start is called before the first frame update
         void Start()
         {
 
         }
 
-        void Update()
+        #endregion
+
+        #region Private
+        private void Update()
         {
             if (Input.GetMouseButtonDown(0))
             {
@@ -23,16 +32,22 @@ namespace WhackAMole.PlayerInput
             }
         }
 
+        #endregion
+
+        #region Public
+
         /// <summary>
         /// Checks if the player has hit a hittable target.
         /// </summary>
         public void CheckIfHit()
         {
-            IHittable tempHit = hit.transform.GetComponent<IHittable>();
+            IHittable tempHit = hit.transform?.GetComponent<IHittable>();
             if (tempHit != null)
             {
                 tempHit.HitTarget();
             }
         }
+
+        #endregion
     }
 }
