@@ -4,8 +4,9 @@ using UnityEngine;
 
 namespace WhackAMole.Hittables
 {
-    internal interface IHittable
+    public interface IHittable
     {
+        IMovable moveAble { get; set; }
         void HitTarget();
     }
 }
