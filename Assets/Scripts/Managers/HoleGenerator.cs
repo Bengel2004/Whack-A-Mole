@@ -8,7 +8,8 @@ namespace WhackAMole.Managers
     {
         #region Public Fields
 
-        public List<Vector3> _holePositions = new();
+        public List<Vector2> _holePositions = new();
+        // you can make it a dictionary too with a Vector2 Key and a boolean to check if the place is already taken or not.
 
         #endregion
 
@@ -60,6 +61,29 @@ namespace WhackAMole.Managers
 
         #endregion
 
+        #region Public
+
+        /// <summary>
+        /// Grabs a random hole that is not the same as the previous one.
+        /// </summary>
+        /// <param name="currentPosition">This value is optional, for the first instance it will be default vector2 (0, 0) but for the next position it may be different.</param>
+        /// <returns></returns>
+        public Vector2 GetRandomHolePosition(Vector2 currentPosition = default(Vector2))
+        {
+            var randomIndex = 0;
+            Vector2 randomPosition = Vector2.zero;
+            do
+            {
+                randomIndex = Random.Range(0, _holePositions.Count - 1);
+                randomPosition = _holePositions[randomIndex];
+            }
+            while (randomPosition == currentPosition);
+
+            return randomPosition;
+        }
+
+        #endregion
+
         // Start is called before the first frame update
         void Start()
         {
@@ -77,7 +101,7 @@ namespace WhackAMole.Managers
 
         private void OnDrawGizmos()
         {
-            foreach (Vector3 hole in _holePositions)
+            foreach (Vector2 hole in _holePositions)
             {
                 Gizmos.DrawSphere(hole, 1f);
             }
