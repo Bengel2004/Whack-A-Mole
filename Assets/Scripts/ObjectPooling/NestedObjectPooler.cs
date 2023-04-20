@@ -23,7 +23,7 @@ namespace WhackAMole.ObjectPooling
 
         #region Setup
 
-        private void Start()
+        private void Awake()
         {
             pool = new List<NestedPool>(4);
             foreach (GameObject prefab in prefabs)
