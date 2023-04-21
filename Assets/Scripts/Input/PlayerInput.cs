@@ -1,7 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using WhackAMole.Hittables;
+using WhackAMole.Managers;
 
 namespace WhackAMole.PlayerInput
 {
@@ -16,6 +15,7 @@ namespace WhackAMole.PlayerInput
         #region Private Fields
 
         private RaycastHit2D hit = default;
+        private bool _canHitMoles = false;
 
         #endregion
 
@@ -23,15 +23,23 @@ namespace WhackAMole.PlayerInput
         // Start is called before the first frame update
         void Start()
         {
+            GameManager.instance.OnStartGame += EnableHitting;
+            GameManager.instance.OnEndGame += DisableHitting;
+        }
 
+        private void OnDisable()
+        {
+            GameManager.instance.OnStartGame -= EnableHitting;
+            GameManager.instance.OnEndGame -= DisableHitting;
         }
 
         #endregion
 
-        #region Private
+        #region Update
+
         private void Update()
         {
-            if (Input.GetMouseButtonDown(0))
+            if (Input.GetMouseButtonUp(0) && _canHitMoles)
             {
                 hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
                 CheckIfHit();
@@ -41,6 +49,22 @@ namespace WhackAMole.PlayerInput
         #endregion
 
         #region Public
+
+        /// <summary>
+        /// Enables ability for player to hit the moles.
+        /// </summary>
+        private void EnableHitting()
+        {
+            _canHitMoles = true;
+        }
+
+        /// <summary>
+        /// Disables ability for player to hit the moles.
+        /// </summary>
+        private void DisableHitting()
+        {
+            _canHitMoles = false;
+        }
 
         /// <summary>
         /// Checks if the player has hit a hittable target.
