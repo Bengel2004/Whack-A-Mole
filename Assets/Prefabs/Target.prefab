@@ -12,8 +12,9 @@ GameObject:
   - component: {fileID: 2386352877329971660}
   - component: {fileID: 2386352877329971662}
   - component: {fileID: 8435163741883210052}
+  - component: {fileID: 1200720213936780486}
   m_Layer: 0
-  m_Name: Mole
+  m_Name: Target
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -76,7 +77,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 75f5f34dc1b5347e0b8351032682f224, type: 3}
-  m_Color: {r: 0.4433962, g: 0.19971181, b: 0.01464045, a: 1}
+  m_Color: {r: 0.8301887, g: 0.8301887, b: 0.8301887, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -125,3 +126,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _thisTarget: {fileID: 11400000, guid: 99df7530058f0084d97655e58dde81a2, type: 2}
+--- !u!114 &1200720213936780486
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2386352877329971661}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11a64b6c9d1817b47928f68f5d4dcd18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _allSprites:
+  - {fileID: 21300000, guid: 46121e963640c344a9f2e33bcdbfbf94, type: 3}
+  - {fileID: 21300000, guid: 37bfde601ebfc664ba5bd02998a25612, type: 3}
+  - {fileID: 21300000, guid: 6693043757ead2e4ebe70c106af57afe, type: 3}
+  - {fileID: 21300000, guid: bf44b5cf66f89f948a256f78f32721cc, type: 3}
+  - {fileID: 21300000, guid: f3fc02330758b264abd9ae0cb20eb5a4, type: 3}
+  - {fileID: 21300000, guid: a1d056c913c914846b7773628c408815, type: 3}
