@@ -6,7 +6,9 @@ namespace WhackAMole.Hittables
 {
     public interface IHittable
     {
-        IMovable moveAble { get; set; }
-        void HitTarget();
+        Transform movableTransform { get; }
+        Vector3 currentPosition { get; }
+        void Move(Vector3 newPosition);
+        void HitHittable(float damage);
     }
 }
