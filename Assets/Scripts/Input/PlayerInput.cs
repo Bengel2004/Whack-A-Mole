@@ -7,6 +7,12 @@ namespace WhackAMole.PlayerInput
 {
     public class PlayerInput : MonoBehaviour
     {
+        #region Serialized Fields
+
+        [SerializeField] private float _damage = 50f;
+
+        #endregion
+
         #region Private Fields
 
         private RaycastHit2D hit = default;
@@ -44,7 +50,7 @@ namespace WhackAMole.PlayerInput
             IHittable tempHit = hit.transform?.GetComponent<IHittable>();
             if (tempHit != null)
             {
-                tempHit.HitTarget();
+                tempHit.HitHittable(_damage);
             }
         }
 
