@@ -1,5 +1,3 @@
-using System.Collections;
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using WhackAMole.Hittables;
@@ -12,12 +10,15 @@ namespace WhackAMole.Managers
 
         [SerializeField] private HittableSpawner _hittableSpawner;
         [SerializeField] private HoleGenerator _holeGenerator;
+        [SerializeField] private Vector2Int _minMaxMoles = new Vector2Int(2, 4);
+        [SerializeField] private int _molesToSpawn => UnityEngine.Random.Range(_minMaxMoles.x, _minMaxMoles.y);
 
         #endregion
 
         #region Private Fields
-
+        // Active hittables with a float to keep the time on when to move the object.
         private List<IHittable> _activeHittables = new();
+
 
         #endregion
 
@@ -26,26 +27,63 @@ namespace WhackAMole.Managers
         // Start is called before the first frame update
         void Start()
         {
-            AddActiveHittable(_hittableSpawner.SpawnHittable());
+            GameManager.instance.OnStartGame += StartGame;
+            GameManager.instance.OnEndGame += EndGame;
+        }
+
+        private void OnDestroy()
+        {
+            GameManager.instance.OnStartGame -= StartGame;
+            GameManager.instance.OnEndGame -= EndGame;
+        }
+
+        #endregion
+
+        #region Update
+
+        // Update is called once per frame
+        private void Update()
+        {
+            if (_activeHittables.Count > 0)
+            {
+                foreach (IHittable hittable in _activeHittables)
+                {
+                    if (Time.time >= hittable.timeToPopUp && hittable.isHidden)
+                    {
+                        MoveActiveHittable(hittable);
+                    }
+                    if (Time.time >= hittable.timeToHide && !hittable.isHidden)
+                    {
+                        HideActiveHittable(hittable);
+                    }
+                }
+            }
         }
 
         #endregion
 
         #region Private
 
-        // Update is called once per frame
-        private void Update()
+        /// <summary>
+        /// Starts the game by spawning some moles.
+        /// </summary>
+        private void StartGame()
         {
-            if (Input.GetKeyDown(KeyCode.L))
+            for (int index = 0; index < _molesToSpawn; index++)
             {
-                _activeHittables.Add(_hittableSpawner.SpawnHittable());
+                AddActiveHittable(_hittableSpawner.SpawnHittable());
             }
+        }
 
-            if (Input.GetKeyDown(KeyCode.M))
+        /// <summary>
+        /// When the game is over, remove all the previous hittables.
+        /// </summary>
+        private void EndGame()
+        {
+            foreach(IHittable hittable in _activeHittables.ToArray())
             {
+                RemoveActiveHittable(hittable);
             }
-
-            Debug.Log(_activeHittables.Count);
         }
 
         /// <summary>
@@ -63,6 +101,7 @@ namespace WhackAMole.Managers
         /// <param name="hittable"></param>
         private void RemoveActiveHittable(IHittable hittable)
         {
+            var index = _activeHittables.IndexOf(hittable);
             _activeHittables.Remove(hittable);
         }
 
@@ -78,9 +117,23 @@ namespace WhackAMole.Managers
         {
             int index = _activeHittables.IndexOf(hittable);
             Vector3 currentPosition = _activeHittables[index].currentPosition;
-            _activeHittables[index].Move(_holeGenerator.GetRandomHolePosition(currentPosition));
+            _activeHittables[index].PopUp(_holeGenerator.GetRandomHolePosition(currentPosition));
         }
 
+        /// <summary>
+        /// Hides the active hittable.
+        /// </summary>
+        /// <param name="hittable"></param>
+        public void HideActiveHittable(IHittable hittable)
+        {
+            int index = _activeHittables.IndexOf(hittable);
+            _activeHittables[index].Hide();
+        }
+
+        /// <summary>
+        /// Triggers the death function and removes the hittable.
+        /// </summary>
+        /// <param name="hittable"></param>
         public void OnHittableDeath(IHittable hittable)
         {
             RemoveActiveHittable(hittable);

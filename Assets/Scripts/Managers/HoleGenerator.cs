@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,13 +5,6 @@ namespace WhackAMole.Managers
 {
     public class HoleGenerator : MonoBehaviour
     {
-        #region Public Fields
-
-        public List<Vector2> _holePositions = new();
-        // you can make it a dictionary too with a Vector2 Key and a boolean to check if the place is already taken or not.
-
-        #endregion
-
         #region Serialized Fields
 
         [SerializeField] private float _holeAmount = 5f;
@@ -25,11 +17,28 @@ namespace WhackAMole.Managers
         private Vector2 _offset = new Vector2(2.5f, -2.5f);
 
         #endregion
+        
+        #region Public Fields
+
+        public List<Vector2> _holePositions = new();
+        // you can make it a dictionary too with a Vector2 Key and a boolean to check if the place is already taken or not.
+
+        #endregion
+
+        #region Setup
+
+        // Start is called before the first frame update
+        void Start()
+        {
+            GenerateGrid();
+        }
+
+        #endregion
 
         #region Private
 
         /// <summary>
-        /// Generates the grid for the mole to move into.
+        /// Generates the grid for the mole to move into based on a height. 6 holes on a height of 2 would generate 2 rows of 3.
         /// </summary>
         private void GenerateGrid()
         {
@@ -40,19 +49,9 @@ namespace WhackAMole.Managers
 
             for (int row = 1; row <= _gridHeight;)
             {
-                if (row != _gridHeight)
+                for (int hole = 1; hole <= _holesPerRow; hole++)
                 {
-                    for (int hole = 1; hole <= _holesPerRow; hole++)
-                    {
-                        _holePositions.Add(new Vector2(hole * _offset.x, row * _offset.y));
-                    }
-                }
-                else
-                {
-                    for (int hole = 1; hole <= _holesPerRow + _holesRemaining; hole++)
-                    {
-                        _holePositions.Add(new Vector2(hole * (_offset.x * 1.25f), row * _offset.y));
-                    }
+                    _holePositions.Add(new Vector2(hole * _offset.x, row * _offset.y));
                 }
                 row++;
             }
@@ -83,28 +82,5 @@ namespace WhackAMole.Managers
         }
 
         #endregion
-
-        // Start is called before the first frame update
-        void Start()
-        {
-            GenerateGrid();
-        }
-
-        // Update is called once per frame
-        void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.K))
-            {
-                GenerateGrid();
-            }
-        }
-
-        private void OnDrawGizmos()
-        {
-            foreach (Vector2 hole in _holePositions)
-            {
-                Gizmos.DrawSphere(hole, 1f);
-            }
-        }
     }
 }

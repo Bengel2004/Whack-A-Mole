@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace WhackAMole.Hittables
@@ -9,5 +7,6 @@ namespace WhackAMole.Hittables
     {
         public float startHealth = 100f;
         public float scoreValue = 10f;
+        public float timeToMoveToNextPoint = 2f;
     }
 }

@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using WhackAMole.Hittables;
 using WhackAMole.ObjectPooling;
@@ -8,8 +6,14 @@ namespace WhackAMole.Managers
 {
     public class HittableSpawner : MonoBehaviour
     {
+        #region Serialized Fields
+
         [SerializeField] private NestedObjectPooler _objectPool;
         [SerializeField] private HoleGenerator _holeGenerator;
+
+        #endregion
+
+        #region Internal
 
         /// <summary>
         /// Spawns a hittable object.
@@ -21,5 +25,7 @@ namespace WhackAMole.Managers
             IHittable tempHittable = tempObject.GetComponent<IHittable>();
             return tempHittable;
         }
+
+        #endregion
     }
 }

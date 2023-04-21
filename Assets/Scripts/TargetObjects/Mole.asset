@@ -14,3 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   startHealth: 50
   scoreValue: 10
+  timeToMoveToNextPoint: 1
