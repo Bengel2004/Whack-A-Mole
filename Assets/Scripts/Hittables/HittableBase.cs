@@ -1,8 +1,7 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using WhackAMole.Managers;
+using WhackAMole.ScoreSystems;
 
 namespace WhackAMole.Hittables
 {
@@ -15,6 +14,10 @@ namespace WhackAMole.Hittables
         public Vector3 currentPosition { get => transform.position; }
 
         public Action<IHittable> OnThisHittableDeath;
+
+        public float timeToHide { get; set; }
+        public float timeToPopUp { get; set; }
+        public bool isHidden { get; set; }
 
         #endregion
 
@@ -38,6 +41,11 @@ namespace WhackAMole.Hittables
             _controller = FindObjectOfType<HittableController>();
         }
 
+        protected void Start()
+        {
+            GameManager.instance.OnEndGame += OnEndGame;
+        }
+
         protected virtual void OnEnable()
         {
             OnThisHittableDeath += _controller.OnHittableDeath;
@@ -50,6 +58,11 @@ namespace WhackAMole.Hittables
             OnThisHittableDeath -= OnDeath;
         }
 
+        protected void OnDestroy()
+        {
+            GameManager.instance.OnEndGame -= OnEndGame;
+        }
+
         #endregion
 
         #region Public
@@ -58,9 +71,22 @@ namespace WhackAMole.Hittables
         /// Moves the hittable to a new position.
         /// </summary>
         /// <param name="newPosition"></param>
-        public virtual void Move(Vector3 newPosition)
+        public virtual void PopUp(Vector3 newPosition)
         {
+            gameObject.SetActive(true);
+            isHidden = false;
+            timeToHide = Time.time + _thisTarget.timeToMoveToNextPoint;
             movableTransform.transform.position = newPosition;
+        }
+
+        /// <summary>
+        /// Hides the hittable from being hit.
+        /// </summary>
+        public void Hide()
+        {
+            isHidden = true;
+            timeToPopUp = Time.time + UnityEngine.Random.Range(1f, 5f);
+            gameObject.SetActive(false);
         }
 
         /// <summary>
@@ -80,6 +106,16 @@ namespace WhackAMole.Hittables
         /// When the hittable Dies.
         /// </summary>
         public virtual void OnDeath(IHittable thisHittable)
+        {
+            ScoreManager.instance.UpdateScore(_thisTarget.scoreValue);
+            health = _thisTarget.startHealth;
+            gameObject.SetActive(false);
+        }
+
+        /// <summary>
+        /// On the end of the game.
+        /// </summary>
+        public void OnEndGame()
         {
             health = _thisTarget.startHealth;
             gameObject.SetActive(false);
