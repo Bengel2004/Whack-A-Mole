@@ -8,10 +8,20 @@ namespace WhackAMole.Managers
 {
     public class HittableController : MonoBehaviour
     {
+        #region Serialized Fields
+
         [SerializeField] private HittableSpawner _hittableSpawner;
         [SerializeField] private HoleGenerator _holeGenerator;
 
+        #endregion
+
+        #region Private Fields
+
         private List<IHittable> _activeHittables = new();
+
+        #endregion
+
+        #region Setup
 
         // Start is called before the first frame update
         void Start()
@@ -19,8 +29,12 @@ namespace WhackAMole.Managers
             AddActiveHittable(_hittableSpawner.SpawnHittable());
         }
 
+        #endregion
+
+        #region Private
+
         // Update is called once per frame
-        void Update()
+        private void Update()
         {
             if (Input.GetKeyDown(KeyCode.L))
             {
@@ -30,13 +44,8 @@ namespace WhackAMole.Managers
             if (Input.GetKeyDown(KeyCode.M))
             {
             }
-        }
 
-        public void MoveActiveHittable(IHittable hittable)
-        {
-            int index = _activeHittables.IndexOf(hittable);
-            Vector3 currentPosition = _activeHittables[index].moveAble.currentPosition;
-            _activeHittables[index].moveAble.Move(_holeGenerator.GetRandomHolePosition(currentPosition));
+            Debug.Log(_activeHittables.Count);
         }
 
         /// <summary>
@@ -56,5 +65,28 @@ namespace WhackAMole.Managers
         {
             _activeHittables.Remove(hittable);
         }
+
+        #endregion
+
+        #region Public
+
+        /// <summary>
+        /// Moves the active hittable to a new position.
+        /// </summary>
+        /// <param name="hittable"></param>
+        public void MoveActiveHittable(IHittable hittable)
+        {
+            int index = _activeHittables.IndexOf(hittable);
+            Vector3 currentPosition = _activeHittables[index].currentPosition;
+            _activeHittables[index].Move(_holeGenerator.GetRandomHolePosition(currentPosition));
+        }
+
+        public void OnHittableDeath(IHittable hittable)
+        {
+            RemoveActiveHittable(hittable);
+            AddActiveHittable(_hittableSpawner.SpawnHittable());
+        }
+
+        #endregion
     }
 }
