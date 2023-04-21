@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -39,6 +38,10 @@ namespace WhackAMole.ObjectPooling
 
         #region Private
 
+        /// <summary>
+        /// Creates the object pool
+        /// </summary>
+        /// <param name="size"></param>
         private void ObjectPool(int size)
         {
             foreach (GameObject prefab in prefabs)
@@ -55,6 +58,9 @@ namespace WhackAMole.ObjectPooling
             }
         }
 
+        /// <summary>
+        /// Spawns the gameobjects for in the pool.
+        /// </summary>
         private void Spawn()
         {
             GameObject obj = Object.Instantiate(prefabs[spawnIndex]);
@@ -67,6 +73,13 @@ namespace WhackAMole.ObjectPooling
 
         #region Public
 
+        /// <summary>
+        /// Grabs the next item from the pool index.
+        /// </summary>
+        /// <param name="_value"></param>
+        /// <param name="_position"></param>
+        /// <param name="_rotation"></param>
+        /// <returns></returns>
         public GameObject GetNext(int _value, Vector3 _position, Quaternion _rotation)
         {
             GameObject obj = pool[_value].nesting[currentIndex[_value]];
