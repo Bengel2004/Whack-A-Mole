@@ -7,7 +7,7 @@ namespace WhackAMole.SaveSystems
     {
         #region Private Fields
 
-        private string _filename = "savedata.txt";
+        private string _filename = "savedata.json";
         private string _savePath => Application.persistentDataPath + "/" + _filename;
 
         #endregion
@@ -84,6 +84,7 @@ namespace WhackAMole.SaveSystems
         public void SaveNewData(string name, float score)
         {
             playerData.playerDatas.Add(new PlayerData(name, score));
+            SaveFile(playerData);
         }
 
         #endregion
